@@ -1,8 +1,4 @@
 /**
- * Created by PanJiaChen on 16/11/18.
- */
-
-/**
  * Parse the time to string
  * @param {(Object|string|number)} time
  * @param {string} cFormat
@@ -45,7 +41,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -92,26 +88,4 @@ export function formatTime(time, option) {
       '分'
     )
   }
-}
-
-/**
- * @param {string} url
- * @returns {Object}
- */
-export function param2Obj(url) {
-  const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
-  if (!search) {
-    return {}
-  }
-  const obj = {}
-  const searchArr = search.split('&')
-  searchArr.forEach(v => {
-    const index = v.indexOf('=')
-    if (index !== -1) {
-      const name = v.substring(0, index)
-      const val = v.substring(index + 1, v.length)
-      obj[name] = val
-    }
-  })
-  return obj
 }
