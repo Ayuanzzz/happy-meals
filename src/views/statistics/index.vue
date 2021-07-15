@@ -1,5 +1,29 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+      <el-input
+        v-model="listQuery.setmeal"
+        placeholder="套餐"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >
+        Search
+      </el-button>
+      <!-- <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        Add
+      </el-button> -->
+      <!-- <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+        Export
+      </el-button> -->
+    </div>
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -14,12 +38,12 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名" align="center" width="100">
+      <el-table-column prop="name" label="姓名" align="center" width="150">
         <template v-slot="{ row }">
           <span>{{ row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="temp" label="套餐" align="center" width="200">
+      <el-table-column prop="temp" label="套餐" align="center">
         <template v-slot="{ row }">
           <span>{{ row.setmeal }}</span>
         </template>
@@ -76,7 +100,12 @@ export default {
           timestamp: "437796585338"
         }
       ],
-      listLoading: true
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        setmeal: undefined
+      }
     };
   },
   created() {
@@ -94,6 +123,10 @@ export default {
         duration: 2000
       });
       this.list.splice(index, 1);
+    },
+    handleFilter() {
+      this.listQuery.page = 1;
+      this.getList();
     }
   }
 };
