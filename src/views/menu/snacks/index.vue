@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.name"
-        placeholder="姓名"
+        placeholder="小食"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -40,7 +40,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名" align="center">
+      <el-table-column prop="name" label="小食" align="center">
         <template v-slot="{ row }">
           <span>{{ row.name }}</span>
         </template>
@@ -83,7 +83,7 @@
           <el-input
             v-model="temp.name"
             class="filter-item"
-            placeholder="请输入姓名"
+            placeholder="请输入小食名"
           >
           </el-input>
         </el-form-item>
@@ -110,12 +110,12 @@ export default {
       list: [
         {
           id: 1,
-          name: "Peter",
+          name: "泡椒牛肉饭",
           timestamp: "437796585338"
         },
         {
           id: 2,
-          name: "Sugar",
+          name: "川式小炒肉",
           timestamp: "437796585338"
         }
       ],

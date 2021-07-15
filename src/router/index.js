@@ -93,12 +93,23 @@ export const constantRoutes = [
   {
     path: '/menu',
     component: Layout,
+    name: 'menu',
+    meta: {
+      title: '菜单',
+      icon: 'table'
+    },
     children: [
       {
-        path: 'index',
-        name: 'menu',
-        component: () => import('@/views/menu/index'),
-        meta: { title: '菜单', icon: 'table' }
+        path: 'setmeal',
+        name: 'setmeal',
+        component: () => import('@/views/menu/setmeal'),
+        meta: { title: '套餐', icon: 'table' }
+      },
+      {
+        path: 'snacks',
+        name: 'snacks',
+        component: () => import('@/views/menu/snacks'),
+        meta: { title: '小食', icon: 'table' }
       }
     ]
   },
@@ -111,7 +122,8 @@ export const constantRoutes = [
         name: 'employee',
         component: () => import('@/views/employee/index'),
         meta: { title: '员工名单', icon: 'table' }
-      }
+      },
+
     ]
   },
   // 404 page must be placed at the end !!!
