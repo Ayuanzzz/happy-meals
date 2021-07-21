@@ -32,16 +32,23 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import('@/views/redirect/index')
+      }
+    ]
+  },
+  {
     path: '/login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
 
-  {
-    path: '/404',
-    component: () => import('@/views/404'),
-    hidden: true
-  },
+
 
   {
     path: '/',
@@ -54,18 +61,7 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-  {
-    path: '/mealOrder',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'mealOrder',
-        component: () => import('@/views/mealOrder/index'),
-        meta: { title: '订餐', icon: 'table' }
-      }
-    ]
-  },
+
   {
     path: '/list',
     component: Layout,
@@ -127,7 +123,27 @@ export const constantRoutes = [
     ]
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  {
+    path: '/404',
+    component: () => import('@/views/404'),
+    hidden: true
+  },
+]
+
+export const asyncRoutes = [
+  {
+    path: '/mealOrder',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'mealOrder',
+        component: () => import('@/views/mealOrder/index'),
+        meta: { title: '订餐', icon: 'table', roles: ['admin'] }
+      }
+    ]
+  },
 ]
 
 const createRouter = () => new Router({

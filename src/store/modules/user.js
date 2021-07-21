@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    roles: []
   }
 }
 
@@ -24,6 +25,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -33,7 +37,9 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
+        //后端返token
         const { data } = response
+        console.log("后端返token", data);
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -48,13 +54,19 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
+        console.log("后端返回userInfo", data);
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
+        const { name, avatar, roles } = data
+        console.log('roles', roles);
+        // roles must be a non-empty array
+        if (!roles || roles.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
 
-        const { name, avatar } = data
-
+        commit('SET_ROLES', roles)
+        console.log('state.roles', state.roles);
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         resolve(data)

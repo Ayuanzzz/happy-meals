@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="filter-container">
+    <!-- <div class="filter-container">
       <el-input
         v-model="listQuery.name"
         placeholder="小食"
@@ -99,13 +99,15 @@
           提交
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
+      info: {},
       tableKey: 0,
       list: [
         {
@@ -141,7 +143,33 @@ export default {
   created() {
     this.getList();
   },
+  mounted() {
+    // this.tempPost();
+    this.tempGet();
+  },
   methods: {
+    tempGet() {
+      axios
+        .get("http://192.168.2.97:8080/mealUser/list", {
+          params: {
+            id: 2
+          }
+        })
+
+        .then(res => {
+          console.log(res);
+        });
+    },
+    tempPost() {
+      axios
+        .post("http://192.168.2.97:8080/mealUser", {
+          userName: "Peter",
+          userRole: "user"
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
     getList() {
       this.listLoading = false;
     },

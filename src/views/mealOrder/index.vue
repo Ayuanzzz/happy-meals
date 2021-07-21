@@ -8,13 +8,19 @@
       label-width="70px"
       style="width: 400px; margin-left:50px;"
     >
-      <el-form-item label="姓名" prop="name">
-        <el-input
-          v-model="temp.name"
+      <el-form-item label="套餐" prop="setmeal">
+        <el-select
+          v-model="temp.setmeal"
           class="filter-item"
-          placeholder="请输入小食名"
+          placeholder="Please select"
         >
-        </el-input>
+          <el-option
+            v-for="item in calendarTypeOptions"
+            :key="item.key"
+            :label="item.display_name"
+            :value="item.key"
+          />
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

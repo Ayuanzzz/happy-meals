@@ -36,6 +36,11 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    // '/dev-api': {
+    //   target: 'https://www.runoob.com',
+    //   pathRewrite: { '^/dev-api': '' },
+    //   changeOrigin: true
+    // }
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {
@@ -87,7 +92,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()
