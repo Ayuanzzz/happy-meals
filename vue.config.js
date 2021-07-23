@@ -36,12 +36,13 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    // '/dev-api': {
-    //   target: 'https://www.runoob.com',
-    //   pathRewrite: { '^/dev-api': '' },
-    //   changeOrigin: true
-    // }
-    before: require('./mock/mock-server.js')
+    proxy: {
+      '/dev-api': {
+        target: 'http://47.108.138.115:8080',
+        pathRewrite: { '^/dev-api': '' },
+        changeOrigin: true
+      }
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

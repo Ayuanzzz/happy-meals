@@ -1,16 +1,24 @@
 import request from '@/utils/request'
 
+export function register(data) {
+  return request({
+    url: '/mealUser/regist',
+    method: 'post',
+    data
+  })
+}
+
 export function login(data) {
   return request({
-    url: '/vue-admin-template/user/login',
-    method: 'post',
+    url: '/mealUser/login',
+    method: 'get',
     data
   })
 }
 
 export function getInfo(token) {
   return request({
-    url: '/vue-admin-template/user/info',
+    url: '/mealUser/user/info',
     method: 'get',
     params: { token }
   })
@@ -18,7 +26,7 @@ export function getInfo(token) {
 
 export function logout() {
   return request({
-    url: '/vue-admin-template/user/logout',
+    url: '/mealUser/user/logout',
     method: 'post'
   })
 }

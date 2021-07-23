@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { register, login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -32,11 +32,23 @@ const mutations = {
 }
 
 const actions = {
+  // user register
+  register({ commit }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      register({ userAccount: username.trim(), userPwd: password }).then(response => {
+        console.log(response);
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ userAccount: username.trim(), userPwd: password }).then(response => {
         //后端返token
         const { data } = response
         console.log("后端返token", data);
