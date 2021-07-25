@@ -168,6 +168,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Login-Register",
   data() {
@@ -206,8 +208,8 @@ export default {
         checkPass: ""
       },
       loginForm: {
-        username: "",
-        password: ""
+        username: "Peter1",
+        password: "111111"
       },
       rules: {
         username: [
@@ -236,15 +238,15 @@ export default {
         const query = route.query;
         if (query) {
           this.redirect = query.redirect;
+          console.log("this.redirect", this.redirect);
           this.otherQuery = this.getOtherQuery(query);
+          console.log("this.otherQuery", this.otherQuery);
         }
       },
       immediate: true
     }
   },
-  created() {
-    // window.addEventListener('storage', this.afterQRScan)
-  },
+
   mounted() {
     if (this.loginForm.username === "") {
       this.$refs.username.focus();
@@ -252,9 +254,7 @@ export default {
       this.$refs.password.focus();
     }
   },
-  destroyed() {
-    // window.removeEventListener('storage', this.afterQRScan)
-  },
+
   methods: {
     checkCapslock(e) {
       const { key } = e;

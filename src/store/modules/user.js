@@ -7,7 +7,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: []
+    roles: ''
   }
 }
 
@@ -40,6 +40,7 @@ const actions = {
         console.log(response);
         resolve()
       }).catch(error => {
+        console.log(error);
         reject(error)
       })
     })
@@ -52,8 +53,8 @@ const actions = {
         //后端返token
         const { data } = response
         console.log("后端返token", data);
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        commit('SET_TOKEN', data)
+        setToken(data)
         resolve()
       }).catch(error => {
         reject(error)
@@ -70,19 +71,15 @@ const actions = {
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-        const { name, avatar, roles } = data
-        console.log('roles', roles);
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
+        const { userAccount, userIcon, userRole } = data
+        console.log(userRole);
+        const roles = userRole
         commit('SET_ROLES', roles)
-        console.log('state.roles', state.roles);
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        commit('SET_NAME', userAccount)
+        commit('SET_AVATAR', userIcon)
         resolve(data)
       }).catch(error => {
+        console.log('getInfoError--', error);
         reject(error)
       })
     })

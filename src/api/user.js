@@ -8,19 +8,18 @@ export function register(data) {
   })
 }
 
-export function login(data) {
+export function login(query) {
   return request({
     url: '/mealUser/login',
     method: 'get',
-    data
+    params: query
   })
 }
 
-export function getInfo(token) {
+export function getInfo() {
   return request({
-    url: '/mealUser/user/info',
+    url: '/mealUser/userInfo',
     method: 'get',
-    params: { token }
   })
 }
 
