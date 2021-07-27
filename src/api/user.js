@@ -25,7 +25,7 @@ export function getInfo() {
 
 export function logout() {
   return request({
-    url: '/mealUser/user/logout',
-    method: 'post'
+    url: '/mealUser/logout',
+    method: 'post',
   })
 }

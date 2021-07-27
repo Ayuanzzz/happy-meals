@@ -10,3 +10,13 @@ export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 
+/**
+ * @param {string} str
+ * @returns {Boolean}
+ */
+export function validName(str) {
+  if (str === "") {
+    return false
+  }
+  return true
+}

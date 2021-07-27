@@ -168,8 +168,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "Login-Register",
   data() {
@@ -208,8 +206,8 @@ export default {
         checkPass: ""
       },
       loginForm: {
-        username: "Peter1",
-        password: "111111"
+        username: "mealpeter",
+        password: "123456"
       },
       rules: {
         username: [
@@ -275,18 +273,20 @@ export default {
         console.log(valid);
         if (valid) {
           this.loading = true;
-          this.$store
-            .dispatch("user/register", this.registerForm)
-            .then(() => {
-              this.$router.push({
-                path: this.redirect || "/",
-                query: this.otherQuery
+          this.$store.dispatch("user/register", this.registerForm).then(() => {
+            this.$store
+              .dispatch("user/login", this.registerForm)
+              .then(() => {
+                this.$router.push({
+                  path: this.redirect || "/",
+                  query: this.otherQuery
+                });
+                this.loading = false;
+              })
+              .catch(() => {
+                this.loading = false;
               });
-              this.loading = false;
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+          });
         } else {
           console.log("error submit!!");
           return false;

@@ -7,7 +7,7 @@ const getDefaultState = () => {
     token: getToken(),
     name: '',
     avatar: '',
-    roles: ''
+    roles: []
   }
 }
 
@@ -52,7 +52,6 @@ const actions = {
       login({ userAccount: username.trim(), userPwd: password }).then(response => {
         //后端返token
         const { data } = response
-        console.log("后端返token", data);
         commit('SET_TOKEN', data)
         setToken(data)
         resolve()
@@ -72,8 +71,9 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
         const { userAccount, userIcon, userRole } = data
-        console.log(userRole);
-        const roles = userRole
+        const roles = []
+        roles.push(userRole)
+        console.log(roles);
         commit('SET_ROLES', roles)
         commit('SET_NAME', userAccount)
         commit('SET_AVATAR', userIcon)
@@ -86,9 +86,10 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      logout().then(res => {
+        console.log(res);
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')

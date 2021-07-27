@@ -62,66 +62,8 @@ export const constantRoutes = [
     }]
   },
 
-  {
-    path: '/list',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'list',
-        component: () => import('@/views/list/index'),
-        meta: { title: '清单', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: '/statistics',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'statistics',
-        component: () => import('@/views/statistics/index'),
-        meta: { title: '统计', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/menu',
-    component: Layout,
-    name: 'menu',
-    meta: {
-      title: '菜单',
-      icon: 'table'
-    },
-    children: [
-      {
-        path: 'setmeal',
-        name: 'setmeal',
-        component: () => import('@/views/menu/setmeal'),
-        meta: { title: '套餐', icon: 'table' }
-      },
-      {
-        path: 'snacks',
-        name: 'snacks',
-        component: () => import('@/views/menu/snacks'),
-        meta: { title: '小食', icon: 'table' }
-      }
-    ]
-  },
-  {
-    path: '/employee',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'employee',
-        component: () => import('@/views/employee/index'),
-        meta: { title: '员工名单', icon: 'table' }
-      },
 
-    ]
-  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true },
   {
@@ -135,12 +77,63 @@ export const asyncRoutes = [
   {
     path: '/mealOrder',
     component: Layout,
+    meta: { roles: ['user'] },
     children: [
       {
         path: 'index',
         name: 'mealOrder',
         component: () => import('@/views/mealOrder/index'),
-        meta: { title: '订餐', icon: 'table', roles: ['admin'] }
+        meta: { title: '订餐', icon: 'table' }
+      }
+    ]
+  },
+  {
+    path: '/list',
+    component: Layout,
+    meta: { roles: ['user'] },
+    children: [
+      {
+        path: 'index',
+        name: 'list',
+        component: () => import('@/views/list/index'),
+        meta: { title: '清单', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/statistics',
+    component: Layout,
+    meta: { roles: ['admin'] },
+    children: [
+      {
+        path: 'index',
+        name: 'statistics',
+        component: () => import('@/views/statistics/index'),
+        meta: { title: '统计', icon: 'table', roles: ['user', 'admin'] }
+      }
+    ]
+  },
+  {
+    path: '/menu',
+    component: Layout,
+    name: 'menu',
+    meta: {
+      title: '菜单',
+      icon: 'table',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'setmeal',
+        name: 'setmeal',
+        component: () => import('@/views/menu/setmeal'),
+        meta: { title: '套餐', icon: 'table' }
+      },
+      {
+        path: 'snacks',
+        name: 'snacks',
+        component: () => import('@/views/menu/snacks'),
+        meta: { title: '小食', icon: 'table' }
       }
     ]
   },

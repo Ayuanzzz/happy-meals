@@ -9,7 +9,6 @@
         @keyup.enter.native="handleFilter"
       />
       <el-button
-        v-waves
         class="filter-item"
         type="primary"
         icon="el-icon-search"
@@ -35,24 +34,22 @@
       highlight-current-row
       style="width:50%"
     >
-      <el-table-column label="序号" align="center" width="80">
-        <template v-slot="{ row }">
-          <span>{{ row.id }}</span>
-        </template>
+      <el-table-column
+        prop="id"
+        label="序号"
+        type="index"
+        align="center"
+        width="80"
+      >
       </el-table-column>
       <el-table-column prop="name" label="套餐" align="center">
         <template v-slot="{ row }">
-          <span>{{ row.name }}</span>
+          <span>{{ row.setName }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="timestamp"
-        label="创建日期"
-        align="center"
-        width="150"
-      >
+      <el-table-column prop="price" label="价格" align="center" width="150">
         <template v-slot="{ row }">
-          <span>{{ row.timestamp | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
+          <span>{{ row.setPrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="180">
@@ -70,6 +67,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 弹出框 -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
@@ -79,11 +77,19 @@
         label-width="70px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="姓名" prop="name">
+        <el-form-item label="套餐名" prop="setName">
           <el-input
-            v-model="temp.name"
+            v-model="temp.setName"
             class="filter-item"
             placeholder="请输入套餐名"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item label="价格" prop="setPrice">
+          <el-input
+            v-model="temp.setPrice"
+            class="filter-item"
+            placeholder="请输入价格"
           >
           </el-input>
         </el-form-item>
@@ -103,22 +109,20 @@
   </div>
 </template>
 <script>
+import { addMeal, getMeal } from "@/api/menu";
 export default {
+  name: "setmeal",
   data() {
+    const validate = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("不能为空"));
+      } else {
+        callback();
+      }
+    };
     return {
       tableKey: 0,
-      list: [
-        {
-          id: 1,
-          name: "泡椒牛肉饭",
-          timestamp: "437796585338"
-        },
-        {
-          id: 2,
-          name: "川式小炒肉",
-          timestamp: "437796585338"
-        }
-      ],
+      list: [],
       listLoading: true,
       listQuery: {
         page: 1,
@@ -126,15 +130,22 @@ export default {
         setmeal: undefined
       },
       temp: {
-        id: undefined,
-        name: "",
-        timestamp: new Date()
+        setName: "",
+        setPrice: null,
+        multipartFile:
+          "http://meal-peter.oss-cn-chengdu.aliyuncs.com/set/…21-07-27/3671a79e-cb2e-46f5-a678-4721a4bb8fc7.png",
+        limitSet: 6,
+        remainSet: 5
       },
       dialogFormVisible: false,
       dialogStatus: "",
       textMap: {
         update: "编辑",
         create: "添加"
+      },
+      rules: {
+        setName: [{ required: true, trigger: "blur", validator: validate }],
+        setPrice: [{ required: true, trigger: "blur", validator: validate }]
       }
     };
   },
@@ -143,7 +154,11 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = false;
+      this.listLoading = true;
+      getMeal().then(res => {
+        console.log(res);
+        this.listLoading = false;
+      });
     },
     handleDelete(row, index) {
       this.$notify({
@@ -160,13 +175,16 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        name: "",
-        timestamp: new Date()
+        setName: "",
+        setPrice: null,
+        multipartFile:
+          "http://meal-peter.oss-cn-chengdu.aliyuncs.com/set/…21-07-27/3671a79e-cb2e-46f5-a678-4721a4bb8fc7.png",
+        limitSet: 6,
+        remainSet: 5
       };
     },
     handleCreate() {
-      this.resetTemp();
+      // this.resetTemp();
       this.dialogStatus = "create";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
@@ -174,16 +192,16 @@ export default {
       });
     },
     createData() {
+      console.log(this.temp);
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024; // mock a id
-          this.temp.author = "vue-element-admin";
-          createArticle(this.temp).then(() => {
+          console.log(this.temp);
+          addMeal(this.temp).then(() => {
             this.list.unshift(this.temp);
             this.dialogFormVisible = false;
             this.$notify({
-              title: "Success",
-              message: "Created Successfully",
+              title: "成功",
+              message: "已添加",
               type: "success",
               duration: 2000
             });
