@@ -109,7 +109,7 @@
   </div>
 </template>
 <script>
-import { addMeal, getMeal } from "@/api/menu";
+import { getMeal, addMeal, updateMeal, deleteMeal } from "@/api/menu";
 export default {
   name: "setmeal",
   data() {
@@ -132,8 +132,6 @@ export default {
       temp: {
         setName: "",
         setPrice: null,
-        multipartFile:
-          "http://meal-peter.oss-cn-chengdu.aliyuncs.com/set/…21-07-27/3671a79e-cb2e-46f5-a678-4721a4bb8fc7.png",
         limitSet: 6,
         remainSet: 5
       },
@@ -156,17 +154,23 @@ export default {
     getList() {
       this.listLoading = true;
       getMeal().then(res => {
-        console.log(res);
+        this.list = res.data;
         this.listLoading = false;
       });
     },
     handleDelete(row, index) {
-      this.$notify({
-        title: "操作成功",
-        message: "已删除",
-        type: "success",
-        duration: 2000
+      console.log("row.id---", row.id);
+      deleteMeal(row.id).then(() => {
+        this.list.splice(index, 1);
+        this.dialogFormVisible = false;
+        this.$notify({
+          title: "操作成功",
+          message: "已删除",
+          type: "success",
+          duration: 2000
+        });
       });
+
       this.list.splice(index, 1);
     },
     handleFilter() {
@@ -177,14 +181,12 @@ export default {
       this.temp = {
         setName: "",
         setPrice: null,
-        multipartFile:
-          "http://meal-peter.oss-cn-chengdu.aliyuncs.com/set/…21-07-27/3671a79e-cb2e-46f5-a678-4721a4bb8fc7.png",
         limitSet: 6,
         remainSet: 5
       };
     },
     handleCreate() {
-      // this.resetTemp();
+      this.resetTemp();
       this.dialogStatus = "create";
       this.dialogFormVisible = true;
       this.$nextTick(() => {
@@ -192,7 +194,6 @@ export default {
       });
     },
     createData() {
-      console.log(this.temp);
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
           console.log(this.temp);
@@ -210,7 +211,23 @@ export default {
       });
     },
     updateData() {
-      console.log("update");
+      this.$refs["dataForm"].validate(valid => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp);
+          console.log("tempData", tempData);
+          updateMeal(tempData).then(() => {
+            const index = this.list.findIndex(v => v.id === this.temp.id);
+            this.list.splice(index, 1, this.temp);
+            this.dialogFormVisible = false;
+            this.$notify({
+              title: "成功",
+              message: "已修改",
+              type: "success",
+              duration: 2000
+            });
+          });
+        }
+      });
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row); // copy obj
