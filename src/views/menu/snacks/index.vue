@@ -44,12 +44,12 @@
       </el-table-column>
       <el-table-column prop="name" label="小食" align="center">
         <template v-slot="{ row }">
-          <span>{{ row.setName }}</span>
+          <span>{{ row.snackName }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="price" label="价格" align="center" width="150">
         <template v-slot="{ row }">
-          <span>{{ row.setPrice }}</span>
+          <span>{{ row.snackPrice }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="180">
@@ -77,17 +77,17 @@
         label-width="70px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="小食名" prop="setName">
+        <el-form-item label="小食名" prop="snackName">
           <el-input
-            v-model="temp.setName"
+            v-model="temp.snackName"
             class="filter-item"
             placeholder="请输入小食名"
           >
           </el-input>
         </el-form-item>
-        <el-form-item label="价格" prop="setPrice">
+        <el-form-item label="价格" prop="snackPrice">
           <el-input
-            v-model="temp.setPrice"
+            v-model="temp.snackPrice"
             class="filter-item"
             placeholder="请输入价格"
           >
@@ -130,10 +130,10 @@ export default {
         setmeal: undefined
       },
       temp: {
-        setName: "",
-        setPrice: null,
-        limitSet: 6,
-        remainSet: 5
+        snackName: "",
+        snackPrice: null,
+        limitSnack: 6,
+        remainSnack: 5
       },
       dialogFormVisible: false,
       dialogStatus: "",
@@ -155,6 +155,7 @@ export default {
       this.listLoading = true;
       getSnacks().then(res => {
         this.list = res.data;
+        console.log(this.list);
         this.listLoading = false;
       });
     },
