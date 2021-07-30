@@ -127,7 +127,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        setmeal: undefined
+        snackmeal: undefined
       },
       temp: {
         snackName: "",
@@ -142,8 +142,8 @@ export default {
         create: "添加"
       },
       rules: {
-        setName: [{ required: true, trigger: "blur", validator: validate }],
-        setPrice: [{ required: true, trigger: "blur", validator: validate }]
+        snackName: [{ required: true, trigger: "blur", validator: validate }],
+        snackPrice: [{ required: true, trigger: "blur", validator: validate }]
       }
     };
   },
@@ -180,10 +180,10 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        setName: "",
-        setPrice: null,
-        limitSet: 6,
-        remainSet: 5
+        snackName: "",
+        snackPrice: null,
+        limitSnack: 6,
+        remainSnack: 5
       };
     },
     handleCreate() {
@@ -197,7 +197,7 @@ export default {
     createData() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
-          console.log(this.temp);
+          this.temp.snackPrice = Number(this.temp.snackPrice);
           addSnacks(this.temp).then(() => {
             this.list.unshift(this.temp);
             this.dialogFormVisible = false;

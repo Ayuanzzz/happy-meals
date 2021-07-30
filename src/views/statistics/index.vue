@@ -78,6 +78,7 @@
   </div>
 </template>
 <script>
+import { getOrder } from "@/api/mealOrder";
 export default {
   data() {
     return {
@@ -113,7 +114,11 @@ export default {
   },
   methods: {
     getList() {
-      this.listLoading = false;
+      this.listLoading = true;
+      getOrder().then(res => {
+        this.listLoading = false;
+        console.log(res);
+      });
     },
     handleDelete(row, index) {
       this.$notify({

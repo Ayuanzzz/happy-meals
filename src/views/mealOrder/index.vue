@@ -1,14 +1,14 @@
 <template>
   <div class="app-container">
     <el-form
-      :model="form"
+      :model="temp"
       label-position="left"
       label-width="70px"
       style="width: 400px; margin-left:50px;"
     >
       <el-form-item label="套餐">
         <el-select
-          v-model="form.setName"
+          v-model="temp.setName"
           @change="currMealChange"
           class="filter-item"
           placeholder="请选择套餐"
@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="小食">
         <el-select
-          v-model="form.snackName"
+          v-model="temp.snackName"
           @change="currSnacksChange"
           class="filter-item"
           placeholder="请选择小食"
@@ -57,7 +57,7 @@
 
 <script>
 import { getMeal, getSnacks } from "@/api/menu";
-import { addOrder } from "@/api/orderMeal";
+import { addOrder } from "@/api/mealOrder";
 export default {
   data() {
     return {
@@ -73,6 +73,10 @@ export default {
         snackNum: 1,
         snackPrice: 0,
         totalPrice: 0
+      },
+      temp: {
+        setName: "",
+        snackName: ""
       },
       message: "Runoob!"
     };
@@ -90,26 +94,29 @@ export default {
     getList() {
       this.listLoading = true;
       getMeal().then(res => {
+        console.log(res);
         res.data.shift();
         this.mealList = res.data;
       });
       getSnacks().then(res => {
+        console.log(res);
         res.data.shift();
         this.snacksList = res.data;
       });
     },
     createOrder() {
+      console.log(this.form);
       addOrder(this.form).then(res => {
         console.log(res);
       });
     },
     currMealChange(val) {
       this.form.setPrice = this.mealList[val].setPrice;
-      this.form.setId = this.mealList[val].setId;
+      this.form.setId = this.mealList[val].id;
     },
     currSnacksChange(val) {
       this.form.snackPrice = this.snacksList[val].snackPrice;
-      this.form.snackId = this.mealList[val].snackId;
+      this.form.snackId = this.snacksList[val].id;
     },
     resetForm() {
       this.form = {
@@ -122,6 +129,10 @@ export default {
         snackNum: 1,
         snackPrice: 0,
         totalPrice: 0
+      };
+      this.temp = {
+        setName: "",
+        snackName: ""
       };
     }
   }

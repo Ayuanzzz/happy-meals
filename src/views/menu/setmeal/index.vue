@@ -196,6 +196,7 @@ export default {
     createData() {
       this.$refs["dataForm"].validate(valid => {
         if (valid) {
+          this.temp.setPrice = Number(this.temp.setPrice);
           addMeal(this.temp).then(() => {
             this.list.unshift(this.temp);
             this.dialogFormVisible = false;
