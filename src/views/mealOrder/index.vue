@@ -8,30 +8,31 @@
     >
       <el-form-item label="套餐">
         <el-select
-          v-model="form.setId"
+          v-model="form.setName"
+          @change="currMealChange"
           class="filter-item"
           placeholder="请选择套餐"
         >
           <el-option
-            ref="myref"
-            v-for="item in mealList"
-            :key="item.id"
+            v-for="(item, index) in mealList"
+            :key="index"
             :label="item.setName + ' ￥' + item.setPrice"
-            :value="item.id"
+            :value="index"
           />
         </el-select>
       </el-form-item>
       <el-form-item label="小食">
         <el-select
-          v-model="form.snackId"
+          v-model="form.snackName"
+          @change="currSnacksChange"
           class="filter-item"
           placeholder="请选择小食"
         >
           <el-option
-            v-for="item in snacksList"
-            :key="item.id"
+            v-for="(item, index) in snacksList"
+            :key="index"
             :label="item.snackName + ' ￥' + item.snackPrice"
-            :value="item.id"
+            :value="index"
           />
         </el-select>
       </el-form-item>
@@ -39,8 +40,12 @@
         <el-input v-model="form.remark" placeholder="备注信息"></el-input>
       </el-form-item>
     </el-form>
+    <div class="count">
+      <span>金额</span>
+      <span>￥{{ calcPrice }}</span>
+    </div>
     <div class="order-footer">
-      <el-button @click="dialogFormVisible = false">
+      <el-button @click="resetForm">
         重置
       </el-button>
       <el-button type="primary" @click="createOrder">
@@ -51,18 +56,25 @@
 </template>
 
 <script>
-import { getMeal } from "@/api/menu";
-import { getSnacks } from "@/api/menu";
+import { getMeal, getSnacks } from "@/api/menu";
+import { addOrder } from "@/api/orderMeal";
 export default {
   data() {
     return {
       mealList: [],
       snacksList: [],
       form: {
-        setId: null,
-        snackId: null,
-        remark: ""
-      }
+        orderStatus: "1",
+        remark: "",
+        setId: 0,
+        setNum: 1,
+        setPrice: 0,
+        snackId: 0,
+        snackNum: 1,
+        snackPrice: 0,
+        totalPrice: 0
+      },
+      message: "Runoob!"
     };
   },
   created() {
@@ -70,23 +82,47 @@ export default {
   },
   computed: {
     calcPrice() {
-      console.log("ref---", this.$refs.myref);
+      this.form.totalPrice = this.form.setPrice + this.form.snackPrice;
+      return this.form.totalPrice;
     }
   },
   methods: {
     getList() {
       this.listLoading = true;
       getMeal().then(res => {
-        console.log(res);
+        res.data.shift();
         this.mealList = res.data;
       });
       getSnacks().then(res => {
-        console.log(res);
+        res.data.shift();
         this.snacksList = res.data;
       });
     },
     createOrder() {
-      console.log("this.form---", this.form);
+      addOrder(this.form).then(res => {
+        console.log(res);
+      });
+    },
+    currMealChange(val) {
+      this.form.setPrice = this.mealList[val].setPrice;
+      this.form.setId = this.mealList[val].setId;
+    },
+    currSnacksChange(val) {
+      this.form.snackPrice = this.snacksList[val].snackPrice;
+      this.form.snackId = this.mealList[val].snackId;
+    },
+    resetForm() {
+      this.form = {
+        orderStatus: "1",
+        remark: "",
+        setId: 0,
+        setNum: 1,
+        setPrice: 0,
+        snackId: 0,
+        snackNum: 1,
+        snackPrice: 0,
+        totalPrice: 0
+      };
     }
   }
 };
