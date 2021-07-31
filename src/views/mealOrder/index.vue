@@ -8,7 +8,7 @@
     >
       <el-form-item label="套餐">
         <el-select
-          v-model="temp.setName"
+          v-model="temp.setIndex"
           @change="currMealChange"
           class="filter-item"
           placeholder="请选择套餐"
@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="小食">
         <el-select
-          v-model="temp.snackName"
+          v-model="temp.snackIndex"
           @change="currSnacksChange"
           class="filter-item"
           placeholder="请选择小食"
@@ -75,6 +75,8 @@ export default {
         totalPrice: 0
       },
       temp: {
+        setIndex: null,
+        snackIndex: null,
         setName: "",
         snackName: ""
       },
@@ -105,10 +107,19 @@ export default {
       });
     },
     createOrder() {
-      console.log(this.form);
-      addOrder(this.form).then(res => {
-        console.log(res);
-      });
+      this.temp.setName = this.mealList[this.temp.setIndex].setName;
+      this.temp.snackName = this.snacksList[this.temp.snackIndex].snackName;
+      const { setName, snackName } = this.temp;
+      const { remark } = this.form;
+      console.log(setName);
+      console.log(snackName);
+      console.log(remark);
+      this.$store.commit("order/SET_MEAL", setName);
+      this.$store.commit("order/SET_SNACKS", snackName);
+      this.$store.commit("order/SET_REMARK", remark);
+      // addOrder(this.form).then(res => {
+      //   console.log(res);
+      // });
     },
     currMealChange(val) {
       this.form.setPrice = this.mealList[val].setPrice;
@@ -131,6 +142,8 @@ export default {
         totalPrice: 0
       };
       this.temp = {
+        setIndex: null,
+        snackIndex: null,
         setName: "",
         snackName: ""
       };
