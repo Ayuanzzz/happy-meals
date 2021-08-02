@@ -172,6 +172,7 @@ export default {
   name: "Login-Register",
   data() {
     const validateUsername = (rule, value, callback) => {
+      console.log("value", value);
       if (value === "") {
         callback(new Error("请输入用户名"));
       } else {
@@ -301,7 +302,7 @@ export default {
             .dispatch("user/login", this.loginForm)
             .then(() => {
               this.$router.push({
-                path: this.redirect || "/",
+                path: "/",
                 query: this.otherQuery
               });
               this.loading = false;

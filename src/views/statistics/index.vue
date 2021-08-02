@@ -2,27 +2,48 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="listQuery.setmeal"
-        placeholder="套餐"
+        v-model="listQuery.id"
+        placeholder="姓名"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
+      <el-select
+        v-model="listQuery.setName"
+        placeholder="套餐"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+      >
+        <el-option
+          v-for="item in mealList"
+          :key="item.key"
+          :label="item"
+          :value="item"
+        />
+      </el-select>
+      <el-select
+        v-model="listQuery.snackName"
+        placeholder="小食"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+      >
+        <el-option
+          v-for="item in snacksList"
+          :key="item.key"
+          :label="item"
+          :value="item"
+        />
+      </el-select>
       <el-button
-        v-waves
         class="filter-item"
         type="primary"
         icon="el-icon-search"
         @click="handleFilter"
       >
-        Search
+        查询
       </el-button>
-      <!-- <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
-      </el-button> -->
-      <!-- <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
-      </el-button> -->
     </div>
     <el-table
       :key="tableKey"
@@ -33,34 +54,37 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="序号" align="center" width="80">
+      <el-table-column
+        prop="id"
+        label="序号"
+        type="index"
+        align="center"
+        width="80"
+      >
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" align="center" width="150">
         <template v-slot="{ row }">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="name" label="姓名" align="center" width="150">
-        <template v-slot="{ row }">
-          <span>{{ row.name }}</span>
-        </template>
-      </el-table-column>
       <el-table-column prop="temp" label="套餐" align="center">
         <template v-slot="{ row }">
-          <span>{{ row.setmeal }}</span>
+          <span>{{ row.setName }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="temp" label="小食" align="center" width="200">
         <template v-slot="{ row }">
-          <span>{{ row.snacks }}</span>
+          <span>{{ row.snackName }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="temp" label="备注" align="center" width="200">
         <template v-slot="{ row }">
-          <span>{{ row.remarks }}</span>
+          <span>{{ row.remark }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="temp" label="订餐时间" align="center" width="150">
         <template v-slot="{ row }">
-          <span>{{ row.timestamp | parseTime("{y}-{m}-{d} {h}:{i}") }}</span>
+          <span>{{ row.orderTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="100">
@@ -83,30 +107,14 @@ export default {
   data() {
     return {
       tableKey: 0,
-      list: [
-        {
-          id: 1,
-          name: "Peter",
-          setmeal: "泡椒牛肉",
-          snacks: "蒸蛋",
-          remarks: "配可乐",
-          timestamp: "437796585338"
-        },
-        {
-          id: 2,
-          name: "Sugar",
-          setmeal: "小炒肉",
-          snacks: "蛋挞",
-          remarks: "配可乐",
-          timestamp: "437796585338"
-        }
-      ],
+      list: [],
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 20,
-        setmeal: undefined
-      }
+        setName: undefined,
+        snackName: undefined
+      },
+      mealList: [],
+      snacksList: []
     };
   },
   created() {
@@ -115,9 +123,14 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getOrder().then(res => {
+      getOrder(this.listQuery).then(res => {
         this.listLoading = false;
         console.log(res);
+        this.list = res.data.records;
+        for (const item of this.list) {
+          this.mealList.push(item.setName);
+          this.snacksList.push(item.snackName);
+        }
       });
     },
     handleDelete(row, index) {
@@ -130,7 +143,7 @@ export default {
       this.list.splice(index, 1);
     },
     handleFilter() {
-      this.listQuery.page = 1;
+      console.log(this.listQuery);
       this.getList();
     }
   }

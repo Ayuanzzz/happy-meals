@@ -8,9 +8,10 @@ export function addOrder(data) {
     })
 }
 
-export function getOrder() {
+export function getOrder(query) {
     return request({
-        url: '/mealSnack/list',
+        url: '/mealOrder/page',
         method: 'get',
+        params: query
     })
 }

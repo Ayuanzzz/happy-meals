@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="listQuery.name"
+        v-model="listQuery.setName"
         placeholder="套餐"
         style="width: 200px;"
         class="filter-item"
@@ -125,9 +125,8 @@ export default {
       list: [],
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 20,
-        setmeal: undefined
+        setName: undefined,
+        size: 1
       },
       temp: {
         setName: "",
@@ -153,8 +152,9 @@ export default {
   methods: {
     getList() {
       this.listLoading = true;
-      getMeal().then(res => {
-        this.list = res.data;
+      getMeal(this.listQuery).then(res => {
+        console.log(res.data.records);
+        this.list = res.data.records;
         this.listLoading = false;
       });
     },
@@ -174,7 +174,7 @@ export default {
       this.list.splice(index, 1);
     },
     handleFilter() {
-      this.listQuery.page = 1;
+      console.log(this.listQuery.setName);
       this.getList();
     },
     resetTemp() {

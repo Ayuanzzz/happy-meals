@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function getMeal() {
+export function getMeal(query) {
     return request({
         url: '/mealSet/list',
         method: 'get',
+        params: query
     })
 }
 

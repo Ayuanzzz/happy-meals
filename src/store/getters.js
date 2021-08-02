@@ -9,5 +9,7 @@ const getters = {
   mealName: state => state.order.mealName,
   snacksName: state => state.order.snacksName,
   remark: state => state.order.remark,
+  totalPrice: state => state.order.totalPrice,
+  timestamp: state => state.order.timestamp,
 }
 export default getters

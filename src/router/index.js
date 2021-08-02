@@ -93,6 +93,19 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/updateUser',
+    component: Layout,
+    meta: { roles: ['user'] },
+    children: [
+      {
+        path: 'index',
+        name: 'list',
+        component: () => import('@/views/updateUser/index'),
+        meta: { title: '用户设置', icon: 'user' }
+      }
+    ]
+  },
+  {
     path: '/statistics',
     component: Layout,
     meta: { roles: ['admin'] },

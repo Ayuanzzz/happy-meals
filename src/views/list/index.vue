@@ -2,22 +2,36 @@
   <div class="app-container">
     <div v-show="show.order">
       <div class="list-header">
-        <h2>阿圆</h2>
-        <h2>2021年7月31日</h2>
+        <h2>{{ name }}</h2>
+        <h2>{{ timestamp | parseTime("{y}-{m}-{d} {h}:{i}") }}</h2>
       </div>
       <div class="list-main">
-        <div class="meal" v-for="(item, index) in orderList" :key="index">
-          <span class="list-title">{{ item.title }}</span>
-          <span class="list-label" :style="{ color: item.color }">
-            {{ item.label }}
+        <div class="meal">
+          <span class="list-title">套餐</span>
+          <span class="list-label" style="color: #409EFF">
+            {{ mealName }}
+          </span>
+        </div>
+        <div class="meal">
+          <span class="list-title">小食</span>
+          <span class="list-label" style="color: #67C23A">
+            {{ snacksName }}
+          </span>
+        </div>
+        <div class="meal">
+          <span class="list-title">备注</span>
+          <span class="list-label" style="color: #E6A23C">
+            {{ remark }}
           </span>
         </div>
       </div>
       <div class="list-footer">
         <span class="list-title">总计</span>
-        <span class="list-label">￥32</span>
+        <span class="list-label">￥{{ totalPrice }}</span>
       </div>
-      <el-button type="primary" style="margin-left:60px">取消订单</el-button>
+      <el-button type="primary" style="margin-left:60px" @click="cancel"
+        >取消订单</el-button
+      >
     </div>
     <noOrder v-show="show.noOrder"></noOrder>
     <cancelOrder v-show="show.cancelOrder"></cancelOrder>
@@ -33,21 +47,31 @@ export default {
   data() {
     return {
       show: { order: true, noOrder: false, cancelOrder: false },
-      orderList: [
-        { title: "套餐", color: "#409EFF", label: "" },
-        { title: "小食", color: "#67C23A", label: "" },
-        { title: "备注", color: "#E6A23C", label: "" }
-      ]
+      time: ""
     };
   },
   computed: {
-    ...mapGetters(["mealName", "snacksName", "remark"])
+    ...mapGetters([
+      "mealName",
+      "snacksName",
+      "remark",
+      "name",
+      "totalPrice",
+      "timestamp"
+    ])
   },
-  mounted() {
-    this.orderList[0].label = this.mealName;
-    this.orderList[1].label = this.snacksName;
-    this.orderList[2].label = this.remark;
+  created() {
+    if (!this.mealName) {
+      this.show.noOrder = true;
+      this.show.order = false;
+    }
   },
-  methods: {}
+  methods: {
+    cancel() {
+      this.show.order = false;
+      this.show.cancelOrder = true;
+      this.$store.commit("order/RESET_STATE");
+    }
+  }
 };
 </script>

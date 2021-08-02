@@ -2,7 +2,9 @@ const getDefaultState = () => {
     return {
         mealName: "",
         snacksName: "",
-        remark: ""
+        remark: "",
+        totalPrice: 0,
+        timestamp: 0
     }
 }
 
@@ -20,7 +22,14 @@ const mutations = {
     },
     SET_REMARK: (state, remark) => {
         state.remark = remark
+    },
+    SET_TOTALPRICE: (state, totalPrice) => {
+        state.totalPrice = totalPrice
+    },
+    SET_TIMESTAMP: (state, timestamp) => {
+        state.timestamp = timestamp
     }
+
 }
 
 
