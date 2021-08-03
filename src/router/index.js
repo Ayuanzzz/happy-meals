@@ -88,7 +88,7 @@ export const asyncRoutes = [
         path: 'index',
         name: 'list',
         component: () => import('@/views/list/index'),
-        meta: { title: '清单', icon: 'form' }
+        meta: { title: '清单', icon: 'shopping' }
       }
     ]
   },
@@ -101,7 +101,20 @@ export const asyncRoutes = [
         path: 'index',
         name: 'list',
         component: () => import('@/views/updateUser/index'),
-        meta: { title: '用户设置', icon: 'user' }
+        meta: { title: '头像设置', icon: 'people' }
+      }
+    ]
+  },
+  {
+    path: '/userList',
+    component: Layout,
+    meta: { roles: ['admin'] },
+    children: [
+      {
+        path: 'index',
+        name: 'userList',
+        component: () => import('@/views/userList/index'),
+        meta: { title: '用户管理', icon: 'people' }
       }
     ]
   },
@@ -124,7 +137,7 @@ export const asyncRoutes = [
     name: 'menu',
     meta: {
       title: '菜单',
-      icon: 'table',
+      icon: 'tree-table',
       roles: ['admin']
     },
     children: [
@@ -132,13 +145,13 @@ export const asyncRoutes = [
         path: 'setmeal',
         name: 'setmeal',
         component: () => import('@/views/menu/setmeal'),
-        meta: { title: '套餐', icon: 'table' }
+        meta: { title: '套餐', icon: 'form' }
       },
       {
         path: 'snacks',
         name: 'snacks',
         component: () => import('@/views/menu/snacks'),
-        meta: { title: '小食', icon: 'table' }
+        meta: { title: '小食', icon: 'form' }
       }
     ]
   },

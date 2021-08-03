@@ -1,20 +1,20 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <img :src="pic" />
+    <span>{{ name }}</span>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
-  name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
+  name: "Dashboard",
+  data() {
+    return {
+      pic: this.$store.getters.avatar,
+      name: this.$store.getters.name
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -22,9 +22,16 @@ export default {
   &-container {
     margin: 30px;
   }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
+}
+img {
+  float: left;
+}
+span {
+  position: relative;
+  top: 100px;
+  left: 50px;
+  font-size: 60px;
+  font-weight: bold;
+  color: #409eff;
 }
 </style>

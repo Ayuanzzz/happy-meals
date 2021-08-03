@@ -2,14 +2,17 @@
   <div class="app-container">
     <el-upload
       class="avatar-uploader"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="http://47.108.138.115:8080/mealUser/updateUserIcon"
       :show-file-list="false"
       :on-success="handleAvatarSuccess"
-      :before-upload="beforeAvatarUpload"
+      :headers="myHeaders"
     >
       <img v-if="imageUrl" :src="imageUrl" class="avatar" />
       <i v-else class="el-icon-plus avatar-uploader-icon"></i>
     </el-upload>
+    <el-button type="primary" @click="updateAvatar">
+      确定
+    </el-button>
   </div>
 </template>
 
@@ -17,7 +20,8 @@
 export default {
   data() {
     return {
-      imageUrl: ""
+      imageUrl: "",
+      myHeaders: { satoken: this.$store.getters.token }
     };
   },
   methods: {
@@ -25,16 +29,22 @@ export default {
       this.imageUrl = URL.createObjectURL(file.raw);
     },
     beforeAvatarUpload(file) {
-      const isGIF = file.type === "image/gif";
+      const isGIFJPG = file.type === "image/gif" || "image/jpg";
       const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isGIF) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
+      if (!isGIFJPG) {
+        this.$message.error("上传头像图片只能是 JPG 或 GIF 格式!");
       }
       if (!isLt2M) {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isGIF && isLt2M;
+    },
+    updateAvatar() {
+      this.$store.commit("user/SET_AVATAR", this.imageUrl);
+      this.$router.push({
+        path: "/"
+      });
     }
   }
 };
